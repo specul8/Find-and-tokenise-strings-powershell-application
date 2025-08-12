@@ -1,0 +1,42 @@
+[
+  {
+    "Description": "Email addresses",
+    "Pattern": "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+  },
+  {
+    "Description": "IPv4 addresses",
+    "Pattern": "\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b"
+  },
+  {
+    "Description": "GUIDs",
+    "Pattern": "\\b[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}\\b"
+  },
+  {
+    "Description": "Credit card numbers",
+    "Pattern": "\\b(?:\\d[ -]*?){13,16}\\b"
+  },
+  {
+    "Description": "Australian phone numbers",
+    "Pattern": "\\b\\(?0[2-8]\\)?[ ]?\\d{4}[ ]?\\d{4}\\b"
+  }
+  {
+    "Description": "Australian TFN",
+    "Pattern": "\\b\\d{3}[ ]?\\d{3}[ ]?\\d{3}\\b"
+  },
+  {
+    "Description": "Australian Medicare Number",
+    "Pattern": "\\b\\d{4}[ ]?\\d{5}[ ]?\\d\\b"
+  },
+  {
+    "Description": "Date of Birth (DD/MM/YYYY)",
+    "Pattern": "\\b\\d{2}/\\d{2}/\\d{4}\\b"
+  },
+  {
+    "Description": "Australian Phone Number",
+    "Pattern": "\\b\\(?0[2-8]\\)?[ ]?\\d{4}[ ]?\\d{4}\\b"
+  },
+  {
+    "Description": "Australian Passport Number",
+    "Pattern": "\\b[A-Z]\\d{7}\\b"
+  }
+]

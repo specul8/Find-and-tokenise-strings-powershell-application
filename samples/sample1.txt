@@ -1,0 +1,7 @@
+Hello,
+
+My email is alice@example.com and my IP is 192.168.1.1.
+Here’s my GUID: 123e4567-e89b-12d3-a456-426614174000.
+
+Regards,
+Alice

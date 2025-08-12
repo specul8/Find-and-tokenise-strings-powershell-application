@@ -1,0 +1,10 @@
+TokenTool/
+├── TokenTool.psm1
+├── TokenTool.psd1
+├── TokenToolGUI.ps1
+├── RegexLibrary.json
+├── README.md
+├── samples/
+│   ├── sample1.txt
+│   ├── sample2.txt
+│   ├── sample3.txt
