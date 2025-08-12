@@ -1,3 +1,19 @@
+function Replace-WithToken {
+    param (
+        [string] $pattern,
+        [string] $prefix
+    )
+    if (-not (Test-FileContentValid -FilePath $InputFile)) {
+        Write-Error "Skipping file due to validation failure: $InputFile"
+        return
+    }
+    $text = [regex]::Replace($text, $pattern, {
+        $token = "$prefix_" + [guid]::NewGuid().ToString()
+        $map[$token] = $_.Value
+        return $token
+    })
+}
+
 function Process-Tokenization {
     param (
         [Parameter(Mandatory=$true)] [string] $sourceFilePath,
@@ -29,7 +45,10 @@ function Process-Tokenization {
         if (-not (Test-Path $mappingFilePath)) {
             throw "Mapping file not found: $mappingFilePath"
         }
-
+        if (-not (Test-FileContentValid -FilePath $InputFile)) {
+            Write-Error "Skipping file due to validation failure: $InputFile"
+            return
+        }
         if ($MappingFormat -eq "json") {
             $map = Get-Content $mappingFilePath | ConvertFrom-Json
         } elseif ($MappingFormat -eq "csv") {
@@ -47,17 +66,6 @@ function Process-Tokenization {
         return
     }
 
-    function Replace-WithToken {
-        param (
-            [string] $pattern,
-            [string] $prefix
-        )
-        $text = [regex]::Replace($text, $pattern, {
-            $token = "$prefix_" + [guid]::NewGuid().ToString()
-            $map[$token] = $_.Value
-            return $token
-        })
-    }
 
     if ($ReplaceEmails) {
         Replace-WithToken "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" "EMAIL"
@@ -99,4 +107,36 @@ function Process-Tokenization {
     }
 
     Set-Content $targetFilePath -Value $text
+}
+
+function Test-FileContentValid {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$FilePath
+    )
+
+    if (-not (Test-Path $FilePath)) {
+        Write-Warning "File does not exist: $FilePath"
+        return $false
+    }
+
+    try {
+        $content = Get-Content -Path $FilePath -ErrorAction Stop
+        if ($content -is [System.Array] -and $content.Count -eq 0) {
+            Write-Warning "File is empty: $FilePath"
+            return $false
+        }
+
+        # Optional: check for non-text content
+        $sample = $content | Select-Object -First 5
+        if ($sample -join "`n" -match '[^\x00-\x7F]') {
+            Write-Warning "File may contain non-ASCII or binary data: $FilePath"
+        }
+
+        return $true
+    }
+    catch {
+        Write-Warning "Unable to read file: $FilePath. $_"
+        return $false
+    }
 }
